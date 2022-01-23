@@ -8,25 +8,24 @@ const myArray = (countrySelected, outputFileName) =>{
         {
             console.log(err)
         }
-        // Get an array of comma separated lines`
-        let linesExceptFirst = data.split('\n').slice(1);
-        var addedHeaders;
-
-        // Turn that into a data structure we can parse (array of arrays)
-        let linesArr = linesExceptFirst.map(line=>line.split(','));
+        // array of comma separated values
+        let input_countries_without_header = data.split('\n').slice(1);
+       
+        // convert it into array of array so we can parse it
+        let linesArr = input_countries_without_header.map(line=>line.split(','));
         var filePath = `./${outputFileName}`; 
-        
+        //if file exists we delete it.
         if(fs.existsSync(filePath)){
             fs.unlinkSync(filePath);
         }
+        //if column is country selected then add it to new array (fileoutput)
         let fileOutput = linesArr.filter((country) => country[0] === countrySelected)
-        console.log(fileOutput.toString())
+        //convert to string
         let stringVersion = fileOutput.toString();
-
+        //adding the headers
         const csvHeaders = 'name,quantity,price\n'
+        //concating the two strings.
         let result = csvHeaders.concat(stringVersion);
-        console.log(result)
-
         // Write out new file
         fs.writeFileSync(`${outputFileName}`, result);
     });
